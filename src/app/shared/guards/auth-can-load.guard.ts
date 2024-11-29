@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanLoad, Route, Router, UrlSegment, UrlTree } from '@angular/router';
+import { Route, Router, UrlSegment, UrlTree } from '@angular/router';
 import { delay, Observable, of, switchMap } from 'rxjs';
 import { UserService } from "../../services/user/user.service";
 import { UserAccessService } from "../../services/user-access/user-access.service";
@@ -7,7 +7,7 @@ import { UserAccessService } from "../../services/user-access/user-access.servic
 @Injectable({
   providedIn: 'root'
 })
-export class AuthCanLoadGuard implements CanLoad {
+export class AuthCanLoadGuard  {
 
   constructor(private userService: UserService, private router: Router, private userAccessService: UserAccessService) {
   }
