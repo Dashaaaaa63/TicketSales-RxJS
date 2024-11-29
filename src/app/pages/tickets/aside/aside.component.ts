@@ -1,6 +1,7 @@
 import { TicketService } from './../../../services/tickets/ticket.service';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { MessageService } from 'primeng/api';
+import { DropdownChangeEvent } from 'primeng/dropdown';
 import { IMenuType } from 'src/app/models/IMenuType';
 import { ITourTypeSelect } from 'src/app/models/ITourTypeSelect';
 import { SettingsService } from 'src/app/services/settings/settings.service';
@@ -35,16 +36,16 @@ export class AsideComponent implements OnInit {
     ];
   }
 
-  changeType(e: { e: Event; value: IMenuType }): void {
+  changeType(e: DropdownChangeEvent): void {
     console.log('ev', e);
     this.updateMenuType.emit(e.value);
   }
 
-  changeTourType(e: { e: Event; value: ITourTypeSelect }): void {
+  changeTourType(e: DropdownChangeEvent): void {
     this.ticketService.updateTour(e.value);
   }
 
-  selectDate(e: string): void {
+  selectDate(e: Date): void {
     console.log('selectDate e:', e);
     this.ticketService.updateTour({ date: e });
   }

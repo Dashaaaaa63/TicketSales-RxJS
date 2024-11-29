@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {OrdersService} from "../../../services/orders/orders.service";
+import { CheckboxChangeEvent } from "primeng/checkbox";
 
 @Component({
   selector: 'app-order-header',
@@ -14,7 +15,7 @@ export class OrderHeaderComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  groupOrders(e: { checked: boolean }): void {
+  groupOrders(e: CheckboxChangeEvent): void {
     this.ordersService.initGroupOrders(e.checked);
   }
 

@@ -120,7 +120,7 @@ export class TicketItemComponent implements OnInit, OnDestroy, AfterViewInit {
   onSubmit(): void {
   }
 
-  selectDate(e: Event): void {
+  selectDate(e: Date): void {
   }
 
 }
