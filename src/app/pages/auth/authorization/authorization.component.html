@@ -1,0 +1,41 @@
+<div class="d-flex flex-column gap-3 col-6 authorization-input-wrap m-auto align-items-center"ы>
+  <div>
+    <span class="me-3">{{ loginNameLable }}: </span>
+    <input
+      type="text"
+      pInputText
+      [ngClass]="{ 'input-error': !login }"
+      [(ngModel)]="login"
+    />
+  </div>
+  <div>
+    <span class="me-3">{{ passwordLable }}: </span>
+    <input
+      type="password"
+      pInputText
+      [ngClass]="{ 'input-error': !password }"
+      [(ngModel)]="password"
+    />
+  </div>
+  <div *ngIf="showCardNumber">
+    <p-checkbox
+      (onChange)="vipStatusSelected()"
+      [binary]="true"
+      [(ngModel)]="selectedValue"
+      label="Есть VIP-карта"
+      class="mb-3"
+    ></p-checkbox>
+    <div *ngIf="selectedValue">
+      <span class="me-3">VIP-номер: </span>
+      <input type="text" pInputText [(ngModel)]="cardNumber" />
+    </div>
+  </div>
+
+  <p-button
+    [label]="authTextButton"
+    icon="pi pi-sign-in"
+    iconPos="right"
+    class="mx-auto"
+    (click)="onAuth($event)"
+  ></p-button>
+</div>

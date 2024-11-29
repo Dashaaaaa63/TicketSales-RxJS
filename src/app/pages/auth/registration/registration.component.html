@@ -1,0 +1,59 @@
+<div
+  class="d-flex flex-column gap-3 col-8 registration-input-wrap m-auto align-items-center"
+>
+  <div>
+    <span class="me-3">Логин</span>
+    <input
+      type="text"
+      pInputText
+      [ngClass]="{ 'input-error': !login }"
+      [(ngModel)]="login"
+    />
+  </div>
+
+  <div>
+    <span class="me-3">Пароль</span>
+    <input
+      type="password"
+      pInputText
+      [ngClass]="{ 'input-error': !password }"
+      [(ngModel)]="password"
+    />
+  </div>
+
+  <div>
+    <span class="me-3">Подтверждение пароля</span>
+    <input
+      type="password"
+      pInputText
+      [ngClass]="{ 'input-error': !passwordRepeat }"
+      [(ngModel)]="passwordRepeat"
+    />
+  </div>
+
+  <div>
+    <span class="me-3">Email</span>
+    <input type="email" pInputText [(ngModel)]="email"/>
+  </div>
+
+  <div *ngIf="showCardNumber; else noSelectedCard">
+    <span class="me-3">Номер карты</span>
+    <input type="text" pInputText [(ngModel)]="cardNumber"/>
+  </div>
+
+  <div>
+    <p-checkbox label="Использовать локальное хранилище" [binary]="true" [(ngModel)]="isUseLocalStorage"></p-checkbox>
+  </div>
+
+  <p-button
+    label="Зарегистрироваться"
+    icon="pi pi-user-plus"
+    iconPos="right"
+    [disabled]="!login || !password || !passwordRepeat"
+    (click)="registration($event)"
+  ></p-button>
+</div>
+
+<ng-template #noSelectedCard>
+  <p>Карта не выбрана</p>
+</ng-template>

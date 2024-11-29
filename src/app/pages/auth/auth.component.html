@@ -1,0 +1,14 @@
+<div>
+  <p-tabView>
+    <p-tabPanel  header="Авторизация" rightIcon="pi pi-sign-in" [cache]="isTabCaching">
+      <ng-template pTemplate="content">
+        <app-authorization></app-authorization>
+      </ng-template>
+    </p-tabPanel>
+    <p-tabPanel header="Регистрация" rightIcon="pi pi-user-plus" [cache]="isTabCaching">
+      <app-registration></app-registration>
+    </p-tabPanel>
+  </p-tabView>
+</div>
+
+<p-toast position="top-right"></p-toast>
