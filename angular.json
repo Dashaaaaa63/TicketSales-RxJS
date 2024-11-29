@@ -85,10 +85,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "ticketSales2022:build:production"
+              "buildTarget": "ticketSales2022:build:production"
             },
             "development": {
-              "browserTarget": "ticketSales2022:build:development"
+              "buildTarget": "ticketSales2022:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -96,7 +96,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ticketSales2022:build"
+            "buildTarget": "ticketSales2022:build"
           }
         },
         "test": {
