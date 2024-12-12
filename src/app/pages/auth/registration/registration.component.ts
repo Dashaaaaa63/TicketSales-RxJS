@@ -4,7 +4,8 @@ import IUser from 'src/app/models/IUser';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { Router } from '@angular/router';
 import { ConfigService } from 'src/app/services/config/config.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { IServerError } from 'src/app/models/IServerError';
 
 @Component({
   selector: 'app-registration',
@@ -60,11 +61,9 @@ export class RegistrationComponent implements OnInit {
             summary: 'Регистрация прошла успешно',
           });
         },
-        error: () => {
-          this.messageService.add({
-            severity: 'warn',
-            summary: 'Пользователь уже зарегистрирован',
-          });
+        error: (error: HttpErrorResponse) => {
+          const serverError = <IServerError>error.error;
+          this.messageService.add({severity: 'warn', summary: serverError.errorText});
         },
       });
 

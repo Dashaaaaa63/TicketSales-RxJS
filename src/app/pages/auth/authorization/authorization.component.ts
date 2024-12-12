@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UserService } from './../../../services/user/user.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -6,6 +6,7 @@ import { MessageService } from 'primeng/api';
 import IUser from 'src/app/models/IUser';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ConfigService } from 'src/app/services/config/config.service';
+import { IServerError } from 'src/app/models/IServerError';
 
 @Component({
   selector: 'app-authorization',
@@ -60,8 +61,9 @@ export class AuthorizationComponent implements OnInit, OnDestroy {
 
           this.router.navigate(['tickets/tickets-list']);
         },
-        error: () => {
-          this.messageService.add({ severity: 'warn', summary: 'Ошибка' });
+        error: (error: HttpErrorResponse) => {
+          const serverError = <IServerError>error.error
+          this.messageService.add({ severity: 'warn', summary: serverError.errorText });
         },
       });
 
