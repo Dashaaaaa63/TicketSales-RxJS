@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import IUser from 'src/app/models/IUser';
-import { BehaviorSubject } from "rxjs";
-import { UserRules } from "../../shared/mocks/rules";
-import { UserAccessService } from "../user-access/user-access.service";
+import { BehaviorSubject } from 'rxjs';
+import { UserRules } from '../../shared/mocks/rules';
+import { UserAccessService } from '../user-access/user-access.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,8 +14,7 @@ export class UserService {
   private userBehSubject = new BehaviorSubject<IUser | null>(null);
   readonly userBehSubject$ = this.userBehSubject.asObservable();
 
-  constructor(private userAccessService: UserAccessService) {
-  }
+  constructor(private userAccessService: UserAccessService) {}
 
   getUser(): IUser {
     const userFromStore = window.localStorage.getItem('user');
@@ -24,7 +23,7 @@ export class UserService {
 
   setUser(user: IUser): void {
     this.user = user;
-    this.userAccessService.initAccess(UserRules)
+    this.userAccessService.initAccess(UserRules);
     this.userBehSubject.next(this.user);
   }
 
@@ -49,8 +48,11 @@ export class UserService {
     window.localStorage.setItem('user', JSON.stringify(user));
   }
 
+  setToStore(value: string) {
+    window.localStorage.setItem(value, '');
+  }
+
   get isAuthenticated(): boolean {
     return !!this.getUser();
   }
-
 }

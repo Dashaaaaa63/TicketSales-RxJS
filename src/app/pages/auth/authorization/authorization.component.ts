@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { UserService } from './../../../services/user/user.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -21,13 +22,13 @@ export class AuthorizationComponent implements OnInit, OnDestroy {
   authTextButton: string;
   showCardNumber: boolean;
 
-
   constructor(
     private authService: AuthService,
     private messageService: MessageService,
     private router: Router,
     private route: ActivatedRoute,
-    private userService: UserService
+    private userService: UserService,
+    private httpClient: HttpClient
   ) {}
 
   ngOnInit(): void {
@@ -45,20 +46,36 @@ export class AuthorizationComponent implements OnInit, OnDestroy {
     const user: IUser = {
       login: this.login,
       password: this.password,
-      cardNumber: this.cardNumber
+      cardNumber: this.cardNumber,
     };
 
-    if (this.authService.checkUser(user)) {
-      this.userService.setUser(user);
-      this.userService.setToken('user-private-token');
-      this.router.navigate(['tickets/tickets-list']);
-    } else {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Ошибка авторизации',
-        detail:
-          'Пользователь с такими данными не существует или введен неверный пароль',
+    this.httpClient
+      .post<IUser>('http://localhost:3000/users/' + user.login, user)
+      .subscribe({
+        next: (data: IUser) => {
+          this.userService.setUser(user);
+          const token: string = 'user-private-token' + data.id;
+          this.userService.setToken(token);
+          this.userService.setToStore(token);
+
+          this.router.navigate(['tickets/tickets-list']);
+        },
+        error: () => {
+          this.messageService.add({ severity: 'warn', summary: 'Ошибка' });
+        },
       });
-    }
+
+    // if (this.authService.checkUser(user)) {
+    //   this.userService.setUser(user);
+    //   this.userService.setToken('user-private-token');
+    //   this.router.navigate(['tickets/tickets-list']);
+    // } else {
+    //   this.messageService.add({
+    //     severity: 'error',
+    //     summary: 'Ошибка авторизации',
+    //     detail:
+    //       'Пользователь с такими данными не существует или введен неверный пароль',
+    //   });
+    // }
   }
 }
