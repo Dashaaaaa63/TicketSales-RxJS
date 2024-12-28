@@ -1,7 +1,7 @@
-import {SettingsService} from './../../../services/settings/settings.service';
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Subject, Subscription, take, takeUntil} from 'rxjs';
-import {ObservableExampleService} from 'src/app/services/testing/observable-example.service';
+import { SettingsService } from './../../../services/settings/settings.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subject, takeUntil } from 'rxjs';
+import { ObservableExampleService } from 'src/app/services/testing/observable-example.service';
 
 @Component({
   selector: 'app-settings',
@@ -24,14 +24,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
       .loadUserSettings()
       .pipe(takeUntil(this.subjectForUnsubscribe))
       .subscribe((data) => {
-        console.log('settings data:', data);
       });
 
     this.settingsService
       .getSettingsSubjectObservable()
       .pipe(takeUntil(this.subjectForUnsubscribe))
       .subscribe((data) => {
-        console.log('settings data from subject:', data);
       });
   }
 

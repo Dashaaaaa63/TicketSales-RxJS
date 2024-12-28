@@ -16,4 +16,5 @@ export interface ITour {
   birthDate?: string | null;
   age?: number | null;
   citizenship?: string | null;
+  _id?: string;
 }

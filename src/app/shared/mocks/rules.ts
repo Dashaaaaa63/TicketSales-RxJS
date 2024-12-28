@@ -4,21 +4,21 @@ export const UserRules: Readonly<IUserRules[]> = [
   {
     path: 'tickets/tickets-list',
     rules: {
-      write: true,
+      write: false,
       read: true,
     }
   },
   {
     path: 'tickets/settings',
     rules: {
-      write: true,
+      write: false,
       read: true,
     }
   },
   {
     path: 'tickets/orders',
     rules: {
-      write: true,
+      write: false,
       read: true
     }
   }

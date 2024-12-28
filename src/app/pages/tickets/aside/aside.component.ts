@@ -1,9 +1,11 @@
 import { TicketService } from './../../../services/tickets/ticket.service';
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { IMenuType } from 'src/app/models/IMenuType';
 import { ITourTypeSelect } from 'src/app/models/ITourTypeSelect';
 import { SettingsService } from 'src/app/services/settings/settings.service';
+import { HttpClient } from "@angular/common/http";
+import { ITour } from "../../../models/ITour";
 
 @Component({
   selector: 'app-aside',
@@ -19,24 +21,25 @@ export class AsideComponent implements OnInit {
   constructor(
     private ticketService: TicketService,
     private messageService: MessageService,
-    private settingsService: SettingsService
-  ) {}
+    private settingsService: SettingsService,
+    private httpClient: HttpClient
+  ) {
+  }
 
   ngOnInit(): void {
     this.menuTypes = [
-      { type: 'custom', label: 'Обычное' },
-      { type: 'extended', label: 'Расширенное' },
+      {type: 'custom', label: 'Обычное'},
+      {type: 'extended', label: 'Расширенное'},
     ];
 
     this.tourTypes = [
-      { label: 'Все', value: 'all' },
-      { label: 'Одиночный', value: 'single' },
-      { label: 'Групповые', value: 'multi' },
+      {label: 'Все', value: 'all'},
+      {label: 'Одиночный', value: 'single'},
+      {label: 'Групповые', value: 'multi'},
     ];
   }
 
   changeType(e: { e: Event; value: IMenuType }): void {
-    console.log('ev', e);
     this.updateMenuType.emit(e.value);
   }
 
@@ -45,15 +48,14 @@ export class AsideComponent implements OnInit {
   }
 
   selectDate(e: string): void {
-    console.log('selectDate e:', e);
-    this.ticketService.updateTour({ date: e });
+    this.ticketService.updateTour({date: e});
   }
 
   initRestError(): void {
     this.ticketService.getError().subscribe(
-      (data) => {},
+      (data) => {
+      },
       (err) => {
-        console.log('err', err);
         this.messageService.add({
           severity: 'error',
           summary: 'Ошибка запроса',
@@ -66,6 +68,18 @@ export class AsideComponent implements OnInit {
   initSettingsData(): void {
     this.settingsService.loadUserSettingsSubject({
       saveToken: false,
+    });
+  }
+
+  initTours(): void {
+    this.httpClient.post<ITour[]>('http://localhost:3000/tours', {}).subscribe((data) => {
+      this.ticketService.updateTicketList(data);
+    });
+  }
+
+  deleteTours(): void {
+    this.httpClient.delete('http://localhost:3000/tours').subscribe((data) => {
+      this.ticketService.updateTicketList([]);
     });
   }
 }

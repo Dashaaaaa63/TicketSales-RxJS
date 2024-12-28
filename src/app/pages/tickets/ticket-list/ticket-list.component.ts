@@ -1,12 +1,12 @@
-import {BlocksStyleDirective} from 'src/app/directives/blocks-style.directive';
-import {ITour} from 'src/app/models/ITour';
-import {TicketService} from '../../../services/tickets/ticket.service';
-import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild,} from '@angular/core';
-import {Router} from '@angular/router';
-import {TicketsStorageService} from 'src/app/services/tickets-storage/tickets-storage.service';
-import {debounceTime, fromEvent, Subscription} from 'rxjs';
-import {ITourTypeSelect} from 'src/app/models/ITourTypeSelect';
-import {UserService} from 'src/app/services/user/user.service';
+import { BlocksStyleDirective } from 'src/app/directives/blocks-style.directive';
+import { ITour } from 'src/app/models/ITour';
+import { TicketService } from '../../../services/tickets/ticket.service';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, } from '@angular/core';
+import { Router } from '@angular/router';
+import { TicketsStorageService } from 'src/app/services/tickets-storage/tickets-storage.service';
+import { debounceTime, fromEvent, Subscription } from 'rxjs';
+import { ITourTypeSelect } from 'src/app/models/ITourTypeSelect';
+import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
   selector: 'app-ticket-list',
@@ -57,7 +57,10 @@ export class TicketListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit(): void {
-    console.log('blockDirective', this.blockDirective);
+
+    this.ticketService.ticketUpdateSubject$.subscribe((data) => {
+      this.tickets = data;
+    });
     const authToken = this.userService.getToken();
     if (!authToken) {
       this.userService.setToken('user-private-token');
@@ -99,7 +102,6 @@ export class TicketListComponent implements OnInit, OnDestroy, AfterViewInit {
     // 1 вариант
     this.tourUnsubscribe = this.ticketService.ticketType$.subscribe(
       (data: ITourTypeSelect) => {
-        console.log('data', data);
 
         let ticketType: string;
         switch (data.value) {
@@ -119,7 +121,6 @@ export class TicketListComponent implements OnInit, OnDestroy, AfterViewInit {
           if (dateWithoutTime) {
             const dateValue = dateWithoutTime[0];
             if (dateValue) {
-              console.log('dateValue', dateValue);
               this.tickets = this.ticketsCopy.filter(
                 (el) => el.date === dateValue
               );
@@ -166,11 +167,10 @@ export class TicketListComponent implements OnInit, OnDestroy, AfterViewInit {
   // }
 
   goToTicketInfoPage(ticket: ITour): void {
-    this.router.navigate([`/tickets/ticket/${ticket.id}`]);
+    this.router.navigate([`/tickets/ticket/${ticket._id}`]);
   }
 
   directiveRenderComplete(e: boolean): void {
-    console.log('call', e);
     const el = this.tourWrap.nativeElement as HTMLElement;
     el.classList.add('bg-color');
     this.loadCountBlock = true;

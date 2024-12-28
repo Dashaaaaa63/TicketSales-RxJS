@@ -1,7 +1,7 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {IMenuType} from 'src/app/models/IMenuType';
-import {filter, Subject, takeUntil, tap} from "rxjs";
-import {ActivatedRoute, ActivatedRouteSnapshot, ActivationStart, Router} from "@angular/router";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { IMenuType } from 'src/app/models/IMenuType';
+import { filter, Subject, takeUntil } from "rxjs";
+import { ActivatedRoute, ActivatedRouteSnapshot, ActivationStart, Router } from "@angular/router";
 
 @Component({
   selector: 'app-tickets',
@@ -9,7 +9,7 @@ import {ActivatedRoute, ActivatedRouteSnapshot, ActivationStart, Router} from "@
   styleUrls: ['./tickets.component.scss']
 })
 export class TicketsComponent implements OnInit, OnDestroy {
-  selectedType: IMenuType
+  selectedType: IMenuType;
   showAside = true;
   destroyer = new Subject();
   dataProp = 'asideHidden';
@@ -45,7 +45,7 @@ export class TicketsComponent implements OnInit, OnDestroy {
   }
 
   recursFindPropertyInData(currentSnapshot: ActivatedRouteSnapshot, searchProp: string): boolean {
-    console.log('currentSnapshot', currentSnapshot);
+
 
     if (currentSnapshot?.data[searchProp]) {
       return true;
@@ -54,7 +54,7 @@ export class TicketsComponent implements OnInit, OnDestroy {
         let result = false;
         currentSnapshot.children.every((el) => {
           result = this.recursFindPropertyInData(el, searchProp);
-          return !result
+          return !result;
         });
         return result;
       } else {

@@ -25,20 +25,16 @@ export class CanWriteDirective implements OnInit, OnDestroy {
   ngOnInit(): void {
     // first check url
     this.checkAccess(this.router.url);
-    console.log('directive run');
     this.unsubscriber = this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe(
       (data) => {
-        console.log('data', data);
         this.checkAccess((data as NavigationEnd).url);
       }
     );
-    console.log('pBtn', this.pBtn);
   }
 
   ngOnDestroy(): void {
-    console.log('directive destroyed');
     this.unsubscriber.unsubscribe();
   }
 

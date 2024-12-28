@@ -15,7 +15,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   // @Input() menuType: IMenuType;
 
   @Input() set menuType(type: IMenuType) {
-    console.log('new type', type);
     this.settingsActive = this.menuType?.type === "extended";
     this.items = this.initMenuItems();
   }

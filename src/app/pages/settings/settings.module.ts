@@ -14,12 +14,11 @@ import { StatisticComponent } from './statistic/statistic.component';
 import { TableModule } from "primeng/table";
 import { UsersComponent } from './users/users.component';
 import { FilterPipe } from './pipes/filter.pipe';
+import { TourLoaderComponent } from './tour-loader/tour-loader.component';
 
 @NgModule({
-  declarations: [SettingsComponent, ChangePasswordFormComponent, StatisticComponent, UsersComponent, FilterPipe],
+  declarations: [SettingsComponent, ChangePasswordFormComponent, StatisticComponent, UsersComponent, FilterPipe, TourLoaderComponent],
   imports: [CommonModule, SettingsRoutingModule, CardModule, InputTextModule, ReactiveFormsModule, ToastModule, CheckboxModule, FormsModule, TabViewModule, TableModule],
 })
 export class SettingsModule {
-
-
 }

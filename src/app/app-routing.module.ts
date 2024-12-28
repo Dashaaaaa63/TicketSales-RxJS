@@ -23,7 +23,7 @@ const routes: Routes = [
     loadChildren: () =>
       import('./pages/tickets/tickets.module').then((m) => m.TicketsModule),
     // canActivate: [AuthGuard],
-    canLoad: [AuthCanLoadGuard] // : Спросить как избежать скрытие AsideComponent если доступ к нему запрещен правилами
+    canLoad: [AuthCanLoadGuard] 
   },
 
   {path: '**', redirectTo: 'auth'},

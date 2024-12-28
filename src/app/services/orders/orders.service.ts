@@ -1,7 +1,10 @@
-import {Injectable} from '@angular/core';
-import {BehaviorSubject, map, Observable, of, switchMap, withLatestFrom} from "rxjs";
-import {TreeNode} from "primeng/api";
-import {OrderPropsType, ORDERSMOCK, OrderType} from "../../shared/mocks/orders";
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, map, Observable, of, switchMap, withLatestFrom } from "rxjs";
+import { TreeNode } from "primeng/api";
+import { OrderPropsType, ORDERSMOCK, OrderType } from "../../shared/mocks/orders";
+import { HttpClient } from "@angular/common/http";
+import { UserService } from "../user/user.service";
+import { IOrder } from "../../models/IOrder";
 
 
 @Injectable({
@@ -11,14 +14,16 @@ export class OrdersService {
   private groupOrders = new BehaviorSubject(false);
   readonly groupOrders$ = this.groupOrders.asObservable();
 
-  constructor() {
+  constructor(
+    private httpClient: HttpClient,
+    private userService: UserService
+  ) {
   }
 
   getOrders(): Observable<TreeNode<OrderType[]>[]> {
     return of(ORDERSMOCK).pipe(
       withLatestFrom(this.groupOrders$),
       switchMap(([orders, group]) => {
-        console.log('group', group);
         return of(orders).pipe(
           map((data) => {
             if (group) {
@@ -30,6 +35,10 @@ export class OrdersService {
         );
       })
     );
+  }
+
+  getMyOrders(): Observable<IOrder[]> {
+    return this.httpClient.get<IOrder[]>(`http://localhost:3000/orders/${this.userService.getUser().id}`);
   }
 
   initGroupOrders(val: boolean): void {
@@ -55,7 +64,6 @@ export class OrdersService {
     } else {
       return <TreeNode<OrderType[]>>[];
     }
-    console.log('treeNodeObj', treeNodeObj);
     return treeNodeObj;
   }
 
@@ -91,7 +99,6 @@ export class OrdersService {
         }
         return treeNodeObj;
       }, treeNodeObj);
-      console.log('treeNodeObj', treeNodeObj);
       return treeNodeObj;
     } else {
       return <TreeNode<OrderType[]>>[];

@@ -1,9 +1,4 @@
-import {
-  HttpEvent,
-  HttpHandler,
-  HttpInterceptor,
-  HttpRequest,
-} from '@angular/common/http';
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { UserService } from '../user/user.service';
@@ -12,16 +7,16 @@ import { UserService } from '../user/user.service';
   providedIn: 'root',
 })
 export class RestInterceptorsService implements HttpInterceptor {
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService) {
+  }
+
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     const hasToken = this.userService.getToken();
-    
+
     if (hasToken) {
-      console.log(hasToken);
-      
       const cloned = req.clone({
         headers: req.headers.set('Authorization', `Bearer ${hasToken}`),
       });
@@ -31,5 +26,5 @@ export class RestInterceptorsService implements HttpInterceptor {
     }
   }
 
-  
+
 }

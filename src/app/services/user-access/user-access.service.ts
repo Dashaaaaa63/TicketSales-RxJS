@@ -7,7 +7,7 @@ import { UserRules } from "../../shared/mocks/rules";
   providedIn: 'root'
 })
 export class UserAccessService {
-  private accessMap = new Map();
+  private accessMap = new Map(); // TODO: создать тип для accessMap
   constructor() {
   }
 
@@ -17,7 +17,6 @@ export class UserAccessService {
         const formattedString = this.formattedPath(rule.path);
         this.accessMap.set(formattedString, rule.rules);
       });
-      console.log('accessMap', this.accessMap);
     }
   }
 
@@ -28,8 +27,6 @@ export class UserAccessService {
 
   canRead(path: string): boolean {
     const formattedString = this.formattedPath(path);
-    console.log('formattedString', formattedString);
-    console.log('this.accessMap', this.accessMap);
     return this.accessMap.get(formattedString)?.read;
   }
 

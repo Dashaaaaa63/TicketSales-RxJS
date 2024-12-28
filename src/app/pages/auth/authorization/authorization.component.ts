@@ -1,4 +1,3 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UserService } from './../../../services/user/user.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -6,7 +5,8 @@ import { MessageService } from 'primeng/api';
 import IUser from 'src/app/models/IUser';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ConfigService } from 'src/app/services/config/config.service';
-import { IServerError } from 'src/app/models/IServerError';
+import { HttpClient } from "@angular/common/http";
+import { IServerError } from "../../../models/IServerError";
 
 @Component({
   selector: 'app-authorization',
@@ -23,6 +23,7 @@ export class AuthorizationComponent implements OnInit, OnDestroy {
   authTextButton: string;
   showCardNumber: boolean;
 
+
   constructor(
     private authService: AuthService,
     private messageService: MessageService,
@@ -30,7 +31,8 @@ export class AuthorizationComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private userService: UserService,
     private httpClient: HttpClient
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.authTextButton = 'Авторизоваться';
@@ -38,34 +40,35 @@ export class AuthorizationComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    console.log('AuthorizationComponent is destroyed');
   }
 
-  vipStatusSelected(): void {}
+  vipStatusSelected(): void {
+  }
 
   onAuth(e: Event): void {
     const user: IUser = {
       login: this.login,
       password: this.password,
-      cardNumber: this.cardNumber,
+      cardNumber: this.cardNumber
     };
-
-    this.httpClient
-      .post<IUser>('http://localhost:3000/users/' + user.login, user)
-      .subscribe({
-        next: (data: IUser) => {
+    this.httpClient.post<{
+      id: string,
+      access_token: string
+    }>(`http://localhost:3000/users/${user.login}`, user).subscribe({
+        next: (data) => {
+          user.id = data.id;
           this.userService.setUser(user);
-          const token: string = 'user-private-token' + data.id;
+          const token: string = data.access_token;
           this.userService.setToken(token);
-          this.userService.setToStore(token);
-
+          this.userService.setTokenToStore(token);
           this.router.navigate(['tickets/tickets-list']);
         },
-        error: (error: HttpErrorResponse) => {
-          const serverError = <IServerError>error.error
-          this.messageService.add({ severity: 'warn', summary: serverError.errorText });
-        },
-      });
+        error: (error) => {
+          const serverError = <IServerError>error.error;
+          this.messageService.add({severity: 'warn', summary: serverError.errorText});
+        }
+      }
+    );
 
     // if (this.authService.checkUser(user)) {
     //   this.userService.setUser(user);
@@ -78,6 +81,5 @@ export class AuthorizationComponent implements OnInit, OnDestroy {
     //     detail:
     //       'Пользователь с такими данными не существует или введен неверный пароль',
     //   });
-    // }
   }
 }

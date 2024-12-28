@@ -1,12 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, of } from 'rxjs';
-import { TOURS } from 'src/app/shared/mocks/tours';
+import { Observable } from 'rxjs';
 import { ITour } from 'src/app/models/ITour';
 import { INearestTour } from "../../models/INearestTour";
 import { ITourLocation } from "../../models/ITourLocation";
-import { NEARESTTOURS } from "../../shared/mocks/nearestTours";
-import { LOCATION } from "../../shared/mocks/location";
+import { IOrder } from "../../models/IOrder";
 
 
 @Injectable({
@@ -17,25 +15,11 @@ export class TicketRestService {
   }
 
   getTickets(): Observable<ITour[]> {
-    return this.httpClient
-      .get<ITour[]>('https://62b9e756ff109cd1dc9dae16.mockapi.io/apiv/v1/tours/')
-      .pipe(
-        catchError((error) => {
-          let errorMessage = '';
+    return this.httpClient.get<ITour[]>('http://localhost:3000/tours');
+  }
 
-          if (error.error instanceof ErrorEvent) {
-            // client side error
-            errorMessage = `Ошибка клиента: ${error.error.message}`;
-          } else {
-            // server side error
-            errorMessage = `Ошибка сервера: ${error.status}, сообщение: ${error.message}`;
-            console.warn('Туры взяты из константы');
-          }
-          console.warn(errorMessage);
-
-          return of(TOURS as ITour[]);
-        })
-      );
+  getTicket(id: string): Observable<ITour> {
+    return this.httpClient.get<ITour>(`http://localhost:3000/tours/${id}`);
   }
 
   getRestError(): Observable<any> {
@@ -43,43 +27,11 @@ export class TicketRestService {
   }
 
   getNearestTickets(): Observable<INearestTour[]> {
-    return this.httpClient.get<INearestTour[]>('https://62b9e756ff109cd1dc9dae16.mockapi.io/apiv/v1/nearestTours/').pipe(
-      catchError((error) => {
-        let errorMessage = '';
-
-        if (error.error instanceof ErrorEvent) {
-          // client side error
-          errorMessage = `Ошибка клиента: ${error.error.message}`;
-        } else {
-          // server side error
-          errorMessage = `Ошибка сервера: ${error.status}, сообщение: ${error.message}`;
-          console.warn('Похожие туры взяты из константы');
-        }
-        console.warn(errorMessage);
-
-        return of(NEARESTTOURS as INearestTour[]);
-      })
-    );
+    return this.httpClient.get<INearestTour[]>('http://localhost:3000/tours');
   }
 
   getLocationList(): Observable<ITourLocation[]> {
-    return this.httpClient.get<ITourLocation[]>('https://62b9e756ff109cd1dc9dae16.mockapi.io/apiv/v1/location/').pipe(
-      catchError((error) => {
-        let errorMessage = '';
-
-        if (error.error instanceof ErrorEvent) {
-          // client side error
-          errorMessage = `Ошибка клиента: ${error.error.message}`;
-        } else {
-          // server side error
-          errorMessage = `Ошибка сервера: ${error.status}, сообщение: ${error.message}`;
-          console.warn('Локации взяты из константы');
-        }
-        console.warn(errorMessage);
-
-        return of(LOCATION as ITourLocation[]);
-      })
-    );
+    return this.httpClient.get<ITourLocation[]>('https://62b9e756ff109cd1dc9dae16.mockapi.io/apiv/v1/location/');
   }
 
   getRandomNearestEvent(type: number): Observable<INearestTour> {
@@ -95,7 +47,17 @@ export class TicketRestService {
     }
   }
 
-  sendTourData(data: any): Observable<any> {
-    return this.httpClient.post('/sendTourData', data);
+  sendTourData(data: IOrder): Observable<any> {
+    return this.httpClient.post('http://localhost:3000/orders/', data);
+  }
+
+  createTour(body: any): Observable<any> {
+    return this.httpClient.post('http://localhost:3000/tour-item', body, {
+      headers: {}
+    });
+  }
+
+  getToursByName(name: string): Observable<ITour[]> {
+    return this.httpClient.get<ITour[]>(`http://localhost:3000/tour-item/${name}`);
   }
 }

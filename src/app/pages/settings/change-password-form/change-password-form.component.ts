@@ -45,6 +45,7 @@ export class ChangePasswordFormComponent implements OnInit {
     });
   }
 
+  // TODO Спросить у преподователя как решить следующую проблему. Если привести форму валидный вид, и после этого ввести значение в поле "текущий пароль" или "новый пароль", которые не подпадают валидацию, то форма все равно считается валидной.
 
   currentPasswordValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
@@ -57,7 +58,6 @@ export class ChangePasswordFormComponent implements OnInit {
         // });
         return {currentPasswordMismatch: true};
       }
-      console.log('currentPassword valid');
       return null;
     };
   }
@@ -74,7 +74,6 @@ export class ChangePasswordFormComponent implements OnInit {
         // });
         return {newAndCurrentPasswordMismatch: true};
       }
-      console.log('newPassword valid');
 
       return null;
     };
@@ -93,7 +92,6 @@ export class ChangePasswordFormComponent implements OnInit {
         // });
         return {newPasswordRepeatMismatch: true};
       }
-      console.log('repeatNewPassword valid');
 
       return null;
     };
